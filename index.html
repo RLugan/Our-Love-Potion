@@ -2021,41 +2021,41 @@ grid.appendChild(thumbnail);
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     
-    // Set canvas size (Instagram story friendly)
-    canvas.width = 400;
-    canvas.height = 600;
+    // Set canvas size (Instagram Story size: 1080x1920)
+    canvas.width = 1080;
+    canvas.height = 1920;
     
     console.log('Canvas created, loading image:', potion.photo);
     
     // Create romantic gradient background
-    const gradient = ctx.createLinearGradient(0, 0, 0, 600);
-    gradient.addColorStop(0, '#1a1a2e');
-    gradient.addColorStop(0.5, '#16213e');
-    gradient.addColorStop(1, '#0f3460');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 400, 600);
-    
-    // Add romantic border
-    ctx.strokeStyle = '#ff69b4';
-    ctx.lineWidth = 8;
-    ctx.setLineDash([]);
-    ctx.strokeRect(10, 10, 380, 580);
-    
-    // Add inner glow border
-    ctx.strokeStyle = '#ffb3ff';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(20, 20, 360, 560);
-    
-    // Add title
-    ctx.fillStyle = '#ffb3ff';
-    ctx.font = 'bold 24px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('💕 Our Love Potion 💕', 200, 60);
-    
-    // Add potion name
-    ctx.fillStyle = '#ffd700';
-    ctx.font = 'bold 20px Arial';
-    ctx.fillText(potion.emoji + ' ' + potion.name, 200, 100);
+const gradient = ctx.createLinearGradient(0, 0, 0, 1920);
+gradient.addColorStop(0, '#1a1a2e');
+gradient.addColorStop(0.5, '#16213e');
+gradient.addColorStop(1, '#0f3460');
+ctx.fillStyle = gradient;
+ctx.fillRect(0, 0, 1080, 1920);
+
+// Add romantic border
+ctx.strokeStyle = '#ff69b4';
+ctx.lineWidth = 20;
+ctx.setLineDash([]);
+ctx.strokeRect(25, 25, 1030, 1870);
+
+// Add inner glow border
+ctx.strokeStyle = '#ffb3ff';
+ctx.lineWidth = 5;
+ctx.strokeRect(50, 50, 980, 1820);
+
+// Add title
+ctx.fillStyle = '#ffb3ff';
+ctx.font = 'bold 72px Arial';
+ctx.textAlign = 'center';
+ctx.fillText('💕 Our Love Potion 💕', 540, 180);
+
+// Add potion name
+ctx.fillStyle = '#ffd700';
+ctx.font = 'bold 48px Arial';
+ctx.fillText(potion.emoji + ' ' + potion.name, 540, 280);
     
     // Load and draw the memory photo
     const img = new Image();
