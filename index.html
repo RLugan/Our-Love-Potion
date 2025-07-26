@@ -154,6 +154,37 @@
             color: #e6ccff;
         }
 
+        .timeline-section {
+    background: rgba(255, 182, 193, 0.2);
+    border: 2px solid rgba(255, 182, 193, 0.5);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    animation: birthdayGlow 4s ease-in-out infinite;
+}
+
+@keyframes birthdayGlow {
+    0%, 100% { box-shadow: 0 0 15px rgba(255, 182, 193, 0.3); }
+    50% { box-shadow: 0 0 25px rgba(255, 182, 193, 0.6); }
+}
+
+.timeline-milestone {
+    font-size: 13px;
+    color: #ffb3ff;
+    font-weight: bold;
+    margin: 5px 0;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    animation: milestoneShimmer 3s ease-in-out infinite;
+}
+
+@keyframes milestoneShimmer {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.02); opacity: 0.9; }
+}
+
         .tutorial-box {
             background: rgba(255, 215, 0, 0.2);
             border: 2px solid rgba(255, 215, 0, 0.5);
@@ -679,6 +710,42 @@
             border-color: #ffd700;
             box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
         }
+.share-memory-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: linear-gradient(45deg, #ff69b4, #ff1493);
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 3;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.memory-thumbnail:hover .share-memory-btn {
+    display: flex;
+}
+
+.share-memory-btn:hover {
+    transform: scale(1.1);
+    background: linear-gradient(45deg, #ff1493, #ff69b4);
+}
+
+.canvas-container {
+    position: fixed;
+    top: -9999px;
+    left: -9999px;
+    z-index: -1;
+}
+        
 
         .memory-thumbnail::after {
             content: '';
@@ -1169,7 +1236,13 @@
 
     <div class="game-container">
         <h1 class="title">💕 Our Love Potion 💕</h1>
-        <p class="subtitle">Mix memories of our special moments to create magical love potions!</p>
+        <p class="subtitle">🎂 Happy Birthday September 2nd, tunanganku! 🎂</p>
+<p class="subtitle">Mix memories of our special moments to create magical love potions!</p>
+<div class="timeline-section">
+    <div class="timeline-milestone">💕 Dating since November 3rd, 2024</div>
+    <div class="timeline-milestone">💍 Engaged April 3rd, 2025</div>
+    <div class="timeline-milestone">🎂 Birthday celebration today!</div>
+</div>
         
         <div class="tutorial-box" id="tutorialBox">
             <div class="tutorial-text">🎓 Tutorial: Try this first recipe!</div>
@@ -1896,12 +1969,23 @@
             thumbnail.onclick = () => openPhotoModal(potion);
             
             // Add label
-            const label = document.createElement('div');
-            label.className = 'memory-label';
-            label.textContent = potion.emoji;
-            thumbnail.appendChild(label);
-            
-            grid.appendChild(thumbnail);
+const label = document.createElement('div');
+label.className = 'memory-label';
+label.textContent = potion.emoji;
+thumbnail.appendChild(label);
+
+// Add share button
+const shareBtn = document.createElement('button');
+shareBtn.className = 'share-memory-btn';
+shareBtn.innerHTML = '📤';
+shareBtn.title = 'Share this memory!';
+shareBtn.onclick = (e) => {
+    e.stopPropagation(); // Prevent opening the modal
+    shareMemory(potion);
+};
+thumbnail.appendChild(shareBtn);
+
+grid.appendChild(thumbnail);
         }
 
         function openPhotoModal(potion) {
@@ -1929,6 +2013,199 @@
             const modal = document.getElementById('photoModal');
             modal.classList.remove('show');
         }
+
+        function shareMemory(potion) {
+    console.log('Share memory called for:', potion.name);
+    
+    // Create a canvas for the share image
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Set canvas size (Instagram story friendly)
+    canvas.width = 400;
+    canvas.height = 600;
+    
+    console.log('Canvas created, loading image:', potion.photo);
+    
+    // Create romantic gradient background
+    const gradient = ctx.createLinearGradient(0, 0, 0, 600);
+    gradient.addColorStop(0, '#1a1a2e');
+    gradient.addColorStop(0.5, '#16213e');
+    gradient.addColorStop(1, '#0f3460');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 400, 600);
+    
+    // Add romantic border
+    ctx.strokeStyle = '#ff69b4';
+    ctx.lineWidth = 8;
+    ctx.setLineDash([]);
+    ctx.strokeRect(10, 10, 380, 580);
+    
+    // Add inner glow border
+    ctx.strokeStyle = '#ffb3ff';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(20, 20, 360, 560);
+    
+    // Add title
+    ctx.fillStyle = '#ffb3ff';
+    ctx.font = 'bold 24px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('💕 Our Love Potion 💕', 200, 60);
+    
+    // Add potion name
+    ctx.fillStyle = '#ffd700';
+    ctx.font = 'bold 20px Arial';
+    ctx.fillText(potion.emoji + ' ' + potion.name, 200, 100);
+    
+    // Load and draw the memory photo
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = function() {
+        // Calculate aspect ratio and draw photo properly
+    const maxPhotoWidth = 300;
+    const maxPhotoHeight = 200;
+    const photoX = (400 - maxPhotoWidth) / 2;
+    const photoY = 150;
+
+    // Calculate scaling to fit within bounds while maintaining aspect ratio
+    const scaleX = maxPhotoWidth / img.width;
+    const scaleY = maxPhotoHeight / img.height;
+    const scale = Math.min(scaleX, scaleY);
+
+    const scaledWidth = img.width * scale;
+    const scaledHeight = img.height * scale;
+
+    // Center the scaled image
+    const centeredX = photoX + (maxPhotoWidth - scaledWidth) / 2;
+    const centeredY = photoY + (maxPhotoHeight - scaledHeight) / 2;
+
+    ctx.drawImage(img, centeredX, centeredY, scaledWidth, scaledHeight);
+
+    // Add photo border around the actual image size
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(centeredX - 3, centeredY - 3, scaledWidth + 6, scaledHeight + 6);
+        
+        // Add message (wrapped text)
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        
+        const message = potion.message;
+        const words = message.split(' ');
+        const lines = [];
+        let currentLine = '';
+        
+        // Wrap text to fit canvas width
+        for (let word of words) {
+            const testLine = currentLine + word + ' ';
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > 350 && currentLine !== '') {
+                lines.push(currentLine.trim());
+                currentLine = word + ' ';
+            } else {
+                currentLine = testLine;
+            }
+        }
+        lines.push(currentLine.trim());
+        
+        // Draw wrapped text
+        let textY = 400;
+        for (let line of lines) {
+            ctx.fillText(line, 200, textY);
+            textY += 20;
+        }
+        
+        // Add birthday message
+        ctx.fillStyle = '#ff69b4';
+        ctx.font = 'bold 16px Arial';
+        ctx.fillText('🎂 Happy Birthday September 2nd! 🎂', 200, textY + 30);
+        
+        // Add branding
+        ctx.fillStyle = '#e6ccff';
+        ctx.font = '12px Arial';
+        ctx.fillText('✨ Our Love Potion Game ✨', 200, 570);
+        
+        // Download the image
+        console.log('Image loaded successfully, downloading...');
+        downloadCanvas(canvas, potion.name);
+    };
+    
+    img.onerror = function() {
+        // If image fails to load, create without photo
+        ctx.fillStyle = '#ff69b4';
+        ctx.font = 'bold 48px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(potion.emoji, 200, 280);
+        
+        // Continue with text as above...
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '14px Arial';
+        
+        const message = potion.message;
+        const words = message.split(' ');
+        const lines = [];
+        let currentLine = '';
+        
+        for (let word of words) {
+            const testLine = currentLine + word + ' ';
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > 350 && currentLine !== '') {
+                lines.push(currentLine.trim());
+                currentLine = word + ' ';
+            } else {
+                currentLine = testLine;
+            }
+        }
+        lines.push(currentLine.trim());
+        
+        let textY = 350;
+        for (let line of lines) {
+            ctx.fillText(line, 200, textY);
+            textY += 20;
+        }
+        
+        ctx.fillStyle = '#ff69b4';
+        ctx.font = 'bold 16px Arial';
+        ctx.fillText('🎂 Happy Birthday September 2nd! 🎂', 200, textY + 30);
+        
+        ctx.fillStyle = '#e6ccff';
+        ctx.font = '12px Arial';
+        ctx.fillText('✨ Our Love Potion Game ✨', 200, 570);
+        
+        downloadCanvas(canvas, potion.name);
+    };
+    
+    img.src = potion.photo;
+}
+
+function downloadCanvas(canvas, potionName) {
+    // Convert canvas to blob and download
+    canvas.toBlob(function(blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Love-Potion-${potionName.replace(/[^a-zA-Z0-9]/g, '-')}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        // Show success message
+        showTopMessage('📤 Memory shared! Image downloaded for your birthday post! 🎂💕', 'success');
+    }, 'image/png');
+}
+
+function showTopMessage(message, type) {
+    const topMessage = document.createElement('div');
+    topMessage.className = `top-message ${type}`;
+    topMessage.textContent = message;
+    document.body.appendChild(topMessage);
+    
+    setTimeout(() => {
+        topMessage.remove();
+    }, 3000);
+}
 
         function showPotionPhoto(potion) {
             // Function removed - no longer using cauldron photos
