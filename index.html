@@ -705,11 +705,7 @@
             overflow: hidden;
         }
 
-        .memory-thumbnail:hover {
-            transform: scale(1.05);
-            border-color: #ffd700;
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
-        }
+        
 .share-memory-btn {
     position: absolute;
     top: 5px;
@@ -722,16 +718,12 @@
     color: white;
     font-size: 12px;
     cursor: pointer;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
     z-index: 3;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.memory-thumbnail:hover .share-memory-btn {
-    display: flex;
 }
 
 .share-memory-btn:hover {
@@ -2046,15 +2038,15 @@ ctx.strokeStyle = '#ffb3ff';
 ctx.lineWidth = 5;
 ctx.strokeRect(50, 50, 980, 1820);
 
-// Add title
+// Add title - smaller to fit on one line
 ctx.fillStyle = '#ffb3ff';
-ctx.font = 'bold 72px Arial';
+ctx.font = 'bold 58px Arial';
 ctx.textAlign = 'center';
 ctx.fillText('💕 Our Love Potion 💕', 540, 200);
 
-// Add potion name
+// Add potion name - smaller to fit on one line
 ctx.fillStyle = '#ffd700';
-ctx.font = 'bold 48px Arial';
+ctx.font = 'bold 38px Arial';
 ctx.fillText(potion.emoji + ' ' + potion.name, 540, 300);
     
     // Load and draw the memory photo
