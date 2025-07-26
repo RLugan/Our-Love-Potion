@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Potion Brewing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Romantic Lab Background */
+        .lab-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.3;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+        }
+
+        .potion-bottle {
+            font-size: 35px;
+            animation: float 10s ease-in-out infinite, glow 3s ease-in-out infinite;
+        }
+
+        .magic-book {
+            font-size: 30px;
+            animation: float 12s ease-in-out infinite;
+        }
+
+        .crystal {
+            font-size: 25px;
+            animation: float 9s ease-in-out infinite, sparkle 2s ease-in-out infinite;
+        }
+
+        .rose-petal {
+            font-size: 20px;
+            animation: float 15s ease-in-out infinite, sway 4s ease-in-out infinite;
+            color: #ff69b4;
+        }
+
+        .star {
+            font-size: 15px;
+            animation: float 20s ease-in-out infinite, twinkle 3s ease-in-out infinite;
+            color: #ffd700;
+        }
+
+        .floating-heart {
+            font-size: 25px;
+            animation: float 14s ease-in-out infinite, heartbeat 2s ease-in-out infinite;
+            color: #ff1493;
+        }
+
+        /* Positioning for background elements */
+        .floating-element:nth-child(1) { top: 5%; left: 5%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 15%; right: 10%; animation-delay: 2s; }
+        .floating-element:nth-child(3) { top: 40%; left: 8%; animation-delay: 4s; }
+        .floating-element:nth-child(4) { bottom: 30%; right: 15%; animation-delay: 6s; }
+        .floating-element:nth-child(5) { bottom: 15%; left: 12%; animation-delay: 8s; }
+        .floating-element:nth-child(6) { top: 25%; left: 50%; animation-delay: 3s; }
+        .floating-element:nth-child(7) { bottom: 40%; left: 60%; animation-delay: 5s; }
+        .floating-element:nth-child(8) { top: 60%; right: 25%; animation-delay: 7s; }
+        .floating-element:nth-child(9) { top: 80%; left: 25%; animation-delay: 1s; }
+        .floating-element:nth-child(10) { top: 35%; right: 5%; animation-delay: 9s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(-40px) rotate(0deg); }
+            75% { transform: translateY(-20px) rotate(-5deg); }
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3)); }
+            50% { filter: drop-shadow(0 0 20px rgba(255, 0, 255, 0.6)); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .game-container {
+            max-width: 400px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.4);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ffb3ff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 20px;
+            color: #e6ccff;
+        }
+
+        .tutorial-box {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: tutorialGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes tutorialGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); }
+        }
+
+        .tutorial-text {
+            font-size: 13px;
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .music-control {
+            background: rgba(138, 43, 226, 0.2);
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: musicGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes musicGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(138, 43, 226, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(138, 43, 226, 0.6); }
+        }
+
+        .music-btn {
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: musicPulse 2s ease-in-out infinite;
+            margin: 5px;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .music-btn.playing {
+            background: linear-gradient(45deg, #22c55e, #16a34a);
+            animation: none;
+        }
+
+        .audio-player {
+            margin-top: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .audio-player.minimized {
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .player-info {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .player-info.minimized {
+            margin-bottom: 10px;
+        }
+
+        .song-display {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+            animation: songGlow 3s ease-in-out infinite;
+        }
+
+        .song-display.minimized {
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+
+        @keyframes songGlow {
+            0%, 100% { text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+        }
+
+        .artist-display {
+            font-size: 12px;
+            color: #e6ccff;
+            opacity: 0.8;
+        }
+
+        .artist-display.minimized {
+            font-size: 10px;
+        }
+
+        .seek-bar-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-size: 10px;
+            color: #e6ccff;
+        }
+
+        .seek-bar-container.minimized {
+            margin-bottom: 8px;
+        }
+
+        #seekBar {
+            flex: 1;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+        }
+
+        #seekBar::-webkit-slider-thumb {
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #seekBar::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .player-controls.minimized {
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn.minimized {
+            width: 35px;
+            height: 35px;
+            font-size: 14px;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        .control-btn.playing {
+            background: linear-gradient(45deg, #22c55e, #16a34a);
+            animation: playingPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes playingPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .volume-control.minimized {
+            gap: 8px;
+        }
+
+        .volume-control span {
+            font-size: 14px;
+        }
+
+        .volume-control.minimized span {
+            font-size: 12px;
+        }
+
+        #volumeSlider {
+            width: 100px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        #volumeSlider.minimized {
+            width: 80px;
+        }
+
+        #volumeSlider::-webkit-slider-thumb {
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #volumeSlider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .top-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 15px;
+            padding: 15px 25px;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.4;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            z-index: 1000;
+            max-width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            animation: slideDown 0.5s ease-out forwards;
+        }
+
+        .top-message.success {
+            background: rgba(34, 197, 94, 0.9);
+            border-color: rgba(34, 197, 94, 0.8);
+            color: white;
+        }
+
+        .top-message.failure {
+            background: rgba(239, 68, 68, 0.9);
+            border-color: rgba(239, 68, 68, 0.8);
+            color: white;
+        }
+
+        @keyframes slideDown {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .lyrics-display {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: lyricGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes lyricGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); }
+        }
+
+        .song-title {
+            font-size: 14px;
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 10px;
+            animation: titleShimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes titleShimmer {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        .lyric-line {
+            font-size: 13px;
+            color: #e6ccff;
+            line-height: 1.4;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: lyricFade 2s ease-in-out;
+        }
+
+        @keyframes lyricFade {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 10px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .cauldron-area {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .cauldron {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, #444 0%, #222 100%);
+            border-radius: 50%;
+            border: 4px solid #666;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.4), 0 0 30px rgba(0, 0, 0, 0.8);
+            animation: cauldronGlow 4s ease-in-out infinite;
+            cursor: pointer;
+        }
+
+        @keyframes cauldronGlow {
+            0%, 100% { box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.4), 0 0 30px rgba(0, 0, 0, 0.8); }
+            50% { box-shadow: inset 0 0 30px rgba(255, 0, 255, 0.8), 0 0 40px rgba(255, 0, 255, 0.5); }
+        }
+
+        .cauldron.brewing {
+            animation: brewingShake 3s ease-in-out;
+        }
+
+        @keyframes brewingShake {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30%, 50%, 70%, 90% { transform: rotate(2deg); }
+            20%, 40%, 60%, 80% { transform: rotate(-2deg); }
+        }
+
+        /* Enhanced Potion Liquid */
+        .potion-liquid {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, #4a00e0, #8e2de2);
+            border-radius: 50%;
+            transition: height 0.5s ease;
+            overflow: hidden;
+        }
+
+        /* Default state - empty */
+        .cauldron .potion-liquid {
+            height: 0%;
+        }
+
+        /* When ingredients are selected - half filled */
+        .cauldron.has-ingredients .potion-liquid {
+            height: 50%;
+            animation: gentleBubble 3s ease-in-out infinite;
+        }
+
+        /* When brewing - filling up animation */
+        .cauldron.brewing .potion-liquid {
+            height: 95%;
+            animation: brewingBubble 0.5s ease-in-out infinite, simpleFillUp 2s ease-out;
+        }
+
+        @keyframes simpleFillUp {
+            0% { height: 50%; }
+            100% { height: 95%; }
+        }
+
+        @keyframes gentleBubble {
+            0%, 100% { 
+                border-radius: 50%;
+                transform: scale(1);
+            }
+            50% { 
+                border-radius: 45% 55% 50% 50%;
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes brewingBubble {
+            0%, 100% { 
+                border-radius: 50%;
+                transform: scale(1) rotate(0deg);
+            }
+            25% { 
+                border-radius: 45% 55% 60% 40%;
+                transform: scale(1.05) rotate(1deg);
+            }
+            50% { 
+                border-radius: 60% 40% 45% 55%;
+                transform: scale(1.08) rotate(-1deg);
+            }
+            75% { 
+                border-radius: 40% 60% 55% 45%;
+                transform: scale(1.05) rotate(0.5deg);
+            }
+        }
+
+        /* Photo overlay in cauldron */
+        .potion-photo {
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            z-index: 5;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .potion-photo.show {
+            opacity: 0.8;
+        }
+
+        .potion-photo.fade-out {
+            opacity: 0;
+            transition: opacity 1s ease-out;
+        }
+
+        /* Memory Gallery Styles */
+        .memory-gallery {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .gallery-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffb3ff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .memory-thumbnail {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .memory-thumbnail:hover {
+            transform: scale(1.05);
+            border-color: #ffd700;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .memory-thumbnail::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 0, 255, 0.2), rgba(138, 43, 226, 0.2));
+            border-radius: 6px;
+        }
+
+        .memory-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 9px;
+            padding: 2px 4px;
+            text-align: center;
+            border-radius: 0 0 6px 6px;
+            z-index: 2;
+        }
+
+        /* Photo Modal Styles */
+        .photo-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        .photo-modal.show {
+            display: flex;
+        }
+
+        .modal-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-caption {
+            color: white;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        @keyframes modalFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes modalSlideIn {
+            0% { transform: scale(0.8) translateY(-50px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: bubble-float 2s infinite ease-in-out;
+        }
+
+        .bubble:nth-child(1) { width: 8px; height: 8px; left: 20%; animation-delay: 0s; }
+        .bubble:nth-child(2) { width: 6px; height: 6px; left: 40%; animation-delay: 0.5s; }
+        .bubble:nth-child(3) { width: 10px; height: 10px; left: 60%; animation-delay: 1s; }
+        .bubble:nth-child(4) { width: 4px; height: 4px; left: 80%; animation-delay: 1.5s; }
+
+        @keyframes bubble-float {
+            0% { transform: translateY(60px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-10px); opacity: 0; }
+        }
+
+        .ingredient-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffb3ff;
+            margin-bottom: 10px;
+            text-align: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ingredients-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .ingredient {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 8px 12px;
+            text-align: center;
+            cursor: grab;
+            transition: all 0.3s ease;
+            font-size: 11px;
+            user-select: none;
+            min-width: 70px;
+            position: relative;
+        }
+
+        .ingredient.memory {
+            border-color: rgba(255, 182, 193, 0.6);
+            background: rgba(255, 182, 193, 0.15);
+        }
+
+        .ingredient.trait {
+            border-color: rgba(255, 105, 180, 0.6);
+            background: rgba(255, 105, 180, 0.15);
+        }
+
+        .ingredient.future {
+            border-color: rgba(138, 43, 226, 0.6);
+            background: rgba(138, 43, 226, 0.15);
+        }
+
+        .ingredient:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 0, 255, 0.4);
+        }
+
+        .ingredient.selected {
+            background: rgba(255, 215, 0, 0.3);
+            border-color: #ffd700;
+            transform: scale(0.95);
+        }
+
+        .ingredient.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .ingredient.tutorial-highlight {
+            animation: tutorialBlink 2s ease-in-out infinite;
+        }
+
+        @keyframes tutorialBlink {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+        }
+
+        .ingredient-icon {
+            font-size: 16px;
+            margin-bottom: 3px;
+            display: block;
+        }
+
+        .ingredient-hint {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 2px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .ingredient:hover .ingredient-hint {
+            opacity: 1;
+        }
+
+        .selected-ingredients {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        .selected-ingredient {
+            background: rgba(255, 215, 0, 0.4);
+            border: 1px solid #ffd700;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .remove-ingredient {
+            cursor: pointer;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .brew-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .brew-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .brew-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .message-area {
+            min-height: 80px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.4;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .message-area.success {
+            background: rgba(34, 197, 94, 0.3);
+            border-color: rgba(34, 197, 94, 0.5);
+            animation: successPulse 0.5s ease-in-out;
+        }
+
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .message-area.failure {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        .message-area.hint {
+            background: rgba(255, 165, 0, 0.3);
+            border-color: rgba(255, 165, 0, 0.5);
+        }
+
+        .discovered-potions {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .discovered-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffb3ff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .potion-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .discovered-potion {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 5px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .reset-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+            transform: translateY(-2px);
+        }
+
+        .hearts, .explosion {
+            position: fixed;
+            pointer-events: none;
+            font-size: 20px;
+            animation: float-up 3s ease-out forwards;
+            z-index: 1000;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-200px) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes successGlow {
+            0% { box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.4), 0 0 30px rgba(0, 0, 0, 0.8); }
+            50% { box-shadow: inset 0 0 40px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.6); }
+            100% { box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.4), 0 0 30px rgba(0, 0, 0, 0.8); }
+        }
+
+        .potion-effect {
+            position: fixed;
+            pointer-events: none;
+            font-size: 25px;
+            z-index: 1000;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+        }
+
+        @keyframes petalFloat {
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translateY(-300px) rotate(720deg) scale(0.3); opacity: 0; }
+        }
+
+        @keyframes waveFlow {
+            0% { transform: translateX(0) translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateX(-200px) translateY(-150px) scale(0.5); opacity: 0; }
+        }
+
+        @keyframes fireRise {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-250px) scale(1.5); opacity: 0; }
+        }
+
+        @keyframes musicFloat {
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translateY(-280px) rotate(360deg) scale(0.7); opacity: 0; }
+        }
+
+        @keyframes diamondSparkle {
+            0% { transform: scale(0.5) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+            100% { transform: scale(0.3) rotate(360deg) translateY(-320px); opacity: 0; }
+        }
+
+        @keyframes sunrayBurst {
+            0% { transform: scale(0.8) rotate(0deg); opacity: 1; }
+            25% { transform: scale(1.3) rotate(90deg); opacity: 0.9; }
+            100% { transform: scale(0.4) rotate(360deg) translateY(-300px); opacity: 0; }
+        }
+
+        @keyframes shieldPulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.7; }
+            100% { transform: scale(0.6) translateY(-200px); opacity: 0; }
+        }
+
+        @keyframes starTwinkle {
+            0% { transform: scale(0.3) rotate(0deg); opacity: 1; }
+            25% { transform: scale(1.1) rotate(90deg); opacity: 0.9; }
+            50% { transform: scale(0.8) rotate(180deg); opacity: 0.7; }
+            100% { transform: scale(0.2) rotate(720deg) translateY(-350px); opacity: 0; }
+        }
+
+        @keyframes paintSplash {
+            0% { transform: scale(1) rotate(0deg); opacity: 1; }
+            30% { transform: scale(1.3) rotate(120deg); opacity: 0.8; }
+            100% { transform: scale(0.5) rotate(360deg) translateY(-220px); opacity: 0; }
+        }
+
+        @keyframes weddingCelebration {
+            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(-100px) scale(1.2) rotate(180deg); opacity: 0.9; }
+            100% { transform: translateY(-280px) scale(0.6) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes auroraWave {
+            0% { transform: translateX(0) translateY(0) scale(0.7) rotate(0deg); opacity: 1; }
+            25% { transform: translateX(-50px) translateY(-80px) scale(1.1) rotate(90deg); opacity: 0.8; }
+            50% { transform: translateX(50px) translateY(-160px) scale(0.9) rotate(180deg); opacity: 0.6; }
+            100% { transform: translateX(-100px) translateY(-400px) scale(0.3) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes memorySwirl {
+            0% { transform: rotate(0deg) scale(1); opacity: 1; }
+            25% { transform: rotate(90deg) scale(1.2); opacity: 0.9; }
+            50% { transform: rotate(180deg) scale(0.9); opacity: 0.7; }
+            100% { transform: rotate(540deg) scale(0.4) translateY(-260px); opacity: 0; }
+        }
+
+        @keyframes heartBurst {
+            0% { transform: scale(0.5) rotate(0deg); opacity: 1; }
+            30% { transform: scale(1.3) rotate(120deg); opacity: 0.9; }
+            100% { transform: scale(0.3) rotate(360deg) translateY(-300px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="lab-background">
+        <div class="floating-element potion-bottle">🧪</div>
+        <div class="floating-element magic-book">📚</div>
+        <div class="floating-element crystal">💎</div>
+        <div class="floating-element rose-petal">🌹</div>
+        <div class="floating-element star">⭐</div>
+        <div class="floating-element floating-heart">💖</div>
+        <div class="floating-element potion-bottle">⚗️</div>
+        <div class="floating-element crystal">🔮</div>
+        <div class="floating-element rose-petal">🌸</div>
+        <div class="floating-element star">✨</div>
+    </div>
+
+    <div class="game-container">
+        <h1 class="title">💕 Our Love Potion 💕</h1>
+        <p class="subtitle">Mix memories of our special moments to create magical love potions!</p>
+        
+        <div class="tutorial-box" id="tutorialBox">
+            <div class="tutorial-text">🎓 Tutorial: Try this first recipe!</div>
+            <div style="font-size: 14px; color: #fff;">
+                <strong>Taman Mini + First Date = Our First Adventure</strong>
+            </div>
+            <div style="font-size: 11px; margin-top: 5px; opacity: 0.8;">
+                Click the highlighted ingredients below, then brew!
+            </div>
+        </div>
+
+        <div class="music-control" id="musicControl">
+            <button class="music-btn" id="musicBtn">
+                🎵 Start Romantic Music 🎵
+            </button>
+            <div style="font-size: 10px; opacity: 0.7; margin-top: 5px;">
+                Click to begin the magical atmosphere!
+            </div>
+            
+            <div id="audioPlayer" class="audio-player" style="display: none;">
+                <audio id="mainAudio" preload="none"></audio>
+                <div class="player-info">
+                    <div class="song-display" id="currentSong">🎵 A Whole New World</div>
+                    <div class="artist-display" id="currentArtist">Disney's Aladdin</div>
+                </div>
+                <div class="seek-bar-container">
+                    <span id="currentTime">0:00</span>
+                    <input type="range" id="seekBar" min="0" max="100" value="0">
+                    <span id="totalTime">0:00</span>
+                </div>
+                <div class="player-controls">
+                    <button class="control-btn" id="prevBtn">⏮️</button>
+                    <button class="control-btn" id="playPauseBtn">⏸️</button>
+                    <button class="control-btn" id="nextBtn">⏭️</button>
+                </div>
+                <div class="volume-control">
+                    <span>🔊</span>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="70">
+                </div>
+            </div>
+        </div>
+
+        <div class="lyrics-display" id="lyricsDisplay" style="display: none;">
+            <div class="song-title" id="songTitle">🎶 A Whole New World 🎶</div>
+            <div class="lyric-line" id="lyricLine">✨ Creating magical moments together ✨</div>
+        </div>
+
+        <div class="message-area" id="messageArea">
+            Start with the tutorial recipe above, then discover more magical combinations!
+        </div>
+        
+        <div class="game-stats">
+            <div class="stat">🧪 Potions: <span id="potionCount">0</span>/12</div>
+            <div class="stat">🎯 Attempts: <span id="attemptCount">0</span></div>
+            <div class="stat">✨ Success: <span id="successRate">0%</span></div>
+        </div>
+        
+        <div class="cauldron-area">
+            <div class="cauldron" id="cauldron">
+                <div class="potion-liquid">
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="selected-ingredients" id="selectedIngredients">
+            <span style="opacity: 0.6;">Select the tutorial ingredients above, then brew!</span>
+        </div>
+
+        <button class="brew-button" id="brewButton" disabled>
+            🔥 Brew Potion! 🔥
+        </button>
+
+        <div class="memory-gallery">
+            <div class="gallery-title">📸 Unlocked Memories</div>
+            <div class="memory-grid" id="memoryGrid">
+                <div style="text-align: center; opacity: 0.6; font-size: 12px;">
+                    Discover potions to unlock precious memories!
+                </div>
+            </div>
+        </div>
+
+        <div class="ingredient-section">
+            <div class="section-title">💕 Our Sweet Memories</div>
+            <div class="ingredients-container">
+                <div class="ingredient memory tutorial-highlight" data-name="taman-mini">
+                    <span class="ingredient-icon">🌺</span>
+                    Taman Mini
+                    <div class="ingredient-hint">Tutorial ingredient!</div>
+                </div>
+                <div class="ingredient memory tutorial-highlight" data-name="first-date">
+                    <span class="ingredient-icon">💕</span>
+                    First Date
+                    <div class="ingredient-hint">Tutorial ingredient!</div>
+                </div>
+                <div class="ingredient memory" data-name="jellyfish-dance">
+                    <span class="ingredient-icon">🪼</span>
+                    Jellyfish Dance
+                    <div class="ingredient-hint">Try with: Beach Day</div>
+                </div>
+                <div class="ingredient memory" data-name="beach-day">
+                    <span class="ingredient-icon">🏖️</span>
+                    Beach Day
+                    <div class="ingredient-hint">Try with: Jellyfish Dance</div>
+                </div>
+                <div class="ingredient memory" data-name="korean-bbq">
+                    <span class="ingredient-icon">🍖</span>
+                    Korean BBQ
+                    <div class="ingredient-hint">Try with: Fighting Over Food</div>
+                </div>
+                <div class="ingredient memory" data-name="fighting-food">
+                    <span class="ingredient-icon">😤</span>
+                    Fighting Over Food
+                    <div class="ingredient-hint">Try with: Korean BBQ</div>
+                </div>
+                <div class="ingredient memory" data-name="songs-karaoke">
+                    <span class="ingredient-icon">🎤</span>
+                    Songs & Karaoke
+                    <div class="ingredient-hint">Try with: Laughing Together</div>
+                </div>
+                <div class="ingredient memory" data-name="laughing-together">
+                    <span class="ingredient-icon">😂</span>
+                    Laughing Together
+                    <div class="ingredient-hint">Try with: Songs & Karaoke</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ingredient-section">
+            <div class="section-title">✨ Your Beautiful Traits</div>
+            <div class="ingredients-container">
+                <div class="ingredient trait" data-name="enchanting-smile">
+                    <span class="ingredient-icon">😊</span>
+                    Your Smile
+                    <div class="ingredient-hint">Try with: Morning Greeting</div>
+                </div>
+                <div class="ingredient trait" data-name="morning-greeting">
+                    <span class="ingredient-icon">🌅</span>
+                    Morning Greeting
+                    <div class="ingredient-hint">Try with: Your Smile</div>
+                </div>
+                <div class="ingredient trait" data-name="caring-heart">
+                    <span class="ingredient-icon">❤️</span>
+                    Caring Heart
+                    <div class="ingredient-hint">Try with: Watch Out Baby</div>
+                </div>
+                <div class="ingredient trait" data-name="watch-out-baby">
+                    <span class="ingredient-icon">👀</span>
+                    Watch Out Baby
+                    <div class="ingredient-hint">Try with: Caring Heart</div>
+                </div>
+                <div class="ingredient trait" data-name="sleepy-talk">
+                    <span class="ingredient-icon">😴</span>
+                    Sleepy Talk
+                    <div class="ingredient-hint">Try with: Half Asleep</div>
+                </div>
+                <div class="ingredient trait" data-name="half-asleep">
+                    <span class="ingredient-icon">🥱</span>
+                    Half Asleep
+                    <div class="ingredient-hint">Try with: Sleepy Talk</div>
+                </div>
+                <div class="ingredient trait" data-name="her-drawing">
+                    <span class="ingredient-icon">🎨</span>
+                    Your Drawing
+                    <div class="ingredient-hint">Try with: Creative Soul</div>
+                </div>
+                <div class="ingredient trait" data-name="creative-soul">
+                    <span class="ingredient-icon">✨</span>
+                    Creative Soul
+                    <div class="ingredient-hint">Try with: Your Drawing</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ingredient-section">
+            <div class="section-title">🌟 Our Future Dreams</div>
+            <div class="ingredients-container">
+                <div class="ingredient future" data-name="engagement-ring">
+                    <span class="ingredient-icon">💎</span>
+                    Engagement Ring
+                    <div class="ingredient-hint">Try with: Ring Shopping</div>
+                </div>
+                <div class="ingredient future" data-name="ring-shopping">
+                    <span class="ingredient-icon">💍</span>
+                    Ring Shopping
+                    <div class="ingredient-hint">Try with: Engagement Ring</div>
+                </div>
+                <div class="ingredient future" data-name="wedding-day">
+                    <span class="ingredient-icon">👰</span>
+                    Wedding Day
+                    <div class="ingredient-hint">Try with: Family Home</div>
+                </div>
+                <div class="ingredient future" data-name="family-home">
+                    <span class="ingredient-icon">🏠</span>
+                    Family Home
+                    <div class="ingredient-hint">Try with: Wedding Day</div>
+                </div>
+                <div class="ingredient future" data-name="aurora-lights">
+                    <span class="ingredient-icon">🌌</span>
+                    Aurora Lights
+                    <div class="ingredient-hint">Try with: Travel Dreams</div>
+                </div>
+                <div class="ingredient future" data-name="travel-dreams">
+                    <span class="ingredient-icon">✈️</span>
+                    Travel Dreams
+                    <div class="ingredient-hint">Try with: Aurora Lights</div>
+                </div>
+                <div class="ingredient future" data-name="adventures-together">
+                    <span class="ingredient-icon">🗺️</span>
+                    Adventures Together
+                    <div class="ingredient-hint">Try with: Creating Memories</div>
+                </div>
+                <div class="ingredient future" data-name="creating-memories">
+                    <span class="ingredient-icon">📸</span>
+                    Creating Memories
+                    <div class="ingredient-hint">Try with: Adventures Together</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="discovered-potions">
+            <div class="discovered-title">🏆 Discovered Love Potions</div>
+            <div class="potion-list" id="discoveredList">
+                <div style="text-align: center; opacity: 0.6; font-size: 12px;">
+                    No potions discovered yet... Try the tutorial first!
+                </div>
+            </div>
+        </div>
+
+        <!-- Photo Popup Modal -->
+        <div class="photo-modal" id="photoModal">
+            <div class="modal-backdrop" onclick="closePhotoModal()"></div>
+            <div class="modal-content">
+                <button class="modal-close" onclick="closePhotoModal()">×</button>
+                <img class="modal-image" id="modalImage" src="" alt="Memory Photo">
+                <div class="modal-caption" id="modalCaption"></div>
+            </div>
+        </div>
+
+        <button class="reset-btn" id="resetBtn">🔄 Reset Game</button>
+    </div>
+
+    <script>
+        // Global variables
+        let selectedIngredients = [];
+        let discoveredPotions = new Set();
+        let usedRecipes = new Set();
+        let attemptCount = 0;
+        let successCount = 0;
+        let tutorialCompleted = false;
+        let musicPlaying = false;
+        let currentSongIndex = 0;
+        let audio = null;
+
+        // Romantic playlist - LOCAL FILES
+        const romanticPlaylist = [
+            {
+                title: "A Whole New World",
+                artist: "Disney's Aladdin",
+                file: "music/a-whole-new-world.mp3",
+                lyrics: [
+                    "✨ Let me show you wonders beyond dreams ✨",
+                    "🌟 Together we'll discover magic everywhere 🌟",
+                    "🎠 Soaring through endless possibilities 🎠",
+                    "💫 A whole new world opens with you 💫",
+                    "🌙 No limits when we're together 🌙",
+                    "⭐ This adventure is ours to share ⭐",
+                    "🔮 Every moment sparkles with wonder 🔮",
+                    "💖 You opened my heart to everything beautiful 💖"
+                ]
+            },
+            {
+                title: "Can't Help Falling in Love",
+                artist: "Elvis Presley",
+                file: "music/cant-help-falling-in-love.mp3",
+                lyrics: [
+                    "💕 My heart chose you without question 💕",
+                    "🌊 Love flows to you like rivers to the sea 🌊",
+                    "⭐ Some things are simply meant to be ⭐",
+                    "💖 I can't resist this perfect love 💖",
+                    "🌹 Take my hand, take my whole life 🌹",
+                    "💫 Destiny brought us together 💫",
+                    "❤️ Falling deeper every single day ❤️",
+                    "✨ This love feels so naturally right ✨"
+                ]
+            },
+            {
+                title: "There Is A Light That Never Goes Out",
+                artist: "The Smiths",
+                file: "music/there-is-a-light.mp3",
+                lyrics: [
+                    "💡 You are the light in my darkness 💡",
+                    "🚗 Take me anywhere, I'll follow you 🚗",
+                    "🌟 With you, I feel truly alive 🌟",
+                    "✨ This light between us never fades ✨",
+                    "🌙 In your presence, I'm finally home 🌙",
+                    "💫 Together we'll face anything 💫",
+                    "🔥 Our love burns bright and eternal 🔥",
+                    "💖 You're my light that never goes out 💖"
+                ]
+            },
+            {
+                title: "Perfect",
+                artist: "Ed Sheeran",
+                file: "music/perfect.mp3",
+                lyrics: [
+                    "💃 Dancing with you in the moonlight 💃",
+                    "🌹 You look absolutely perfect tonight 🌹",
+                    "👫 We were just kids when love found us 👫",
+                    "💕 Barefoot and carefree, hearts intertwined 💕",
+                    "✨ I see my future shining in your eyes ✨",
+                    "🎵 This is our favorite song of love 🎵",
+                    "💖 You're stronger and more beautiful each day 💖",
+                    "👰 I found my angel, my perfect love 👰"
+                ]
+            },
+            {
+                title: "You're Beautiful",
+                artist: "James Blunt",
+                file: "music/youre-beautiful.mp3",
+                lyrics: [
+                    "😍 Your beauty takes my breath away 😍",
+                    "💫 I saw an angel and knew it was you 💫",
+                    "🌟 That smile could light up the world 🌟",
+                    "👀 One look and my heart was yours forever 👀",
+                    "💖 You're beautiful, inside and out 💖",
+                    "✨ Pure radiance in human form ✨",
+                    "🌹 My life became brilliant with you 🌹",
+                    "💕 Beautiful soul, beautiful heart, beautiful you 💕"
+                ]
+            }
+        ];
+
+        let currentLyricIndex = 0;
+
+        // Potion recipes with your Google Drive photos
+        const potionRecipes = {
+            "first-date,taman-mini": {
+                name: "Our First Adventure",
+                message: "tunaganku cantikkk - Our first date at Taman Mini where I saw your beauty! That magical day started everything! 🌺💕",
+                emoji: "🌺💕",
+                photo: "https://raw.githubusercontent.com/RLugan/Our-Love-Potion/main/images/first-date-taman-mini.jpg"
+            },
+            "beach-day,jellyfish-dance": {
+                name: "Silly Beach Love",
+                message: "Your adorable jellyfish dance before we went to the beach! You made me fall in love with your playful spirit! 🪼🏖️",
+                emoji: "🪼🏖️",
+                photo: "https://raw.githubusercontent.com/RLugan/Our-Love-Potion/main/images/beach-jellyfish.jpg"
+            },
+            "fighting-food,korean-bbq": {
+                name: "Competitive BBQ Love",
+                message: "Remember us forcing and fighting to finish the rest of the BBQ? That competitive love was so cute! 🍖😤",
+                emoji: "🍖😂",
+                photo: "https://raw.githubusercontent.com/RLugan/Our-Love-Potion/main/images/korean-bbq.jpg"
+            },
+            "laughing-together,songs-karaoke": {
+                name: "Musical Joy Potion",
+                message: "Singing together and laughing at our terrible voices - pure joy! Can't help falling in love with those moments! 🎤😂",
+                emoji: "🎵😂",
+                photo: "https://raw.githubusercontent.com/RLugan/Our-Love-Potion/main/images/karaoke-music.jpg"
+            },
+            "engagement-ring,ring-shopping": {
+                name: "Forever Promise Elixir",
+                message: "The day we went looking for rings and started planning our forever! That beautiful moment when we chose our future! 💍✨",
+                emoji: "💍✨",
+                photo: "https://raw.githubusercontent.com/RLugan/Our-Love-Potion/main/images/engagement-rings.jpg"
+            },
+            "enchanting-smile,morning-greeting": {
+                name: "Morning Sunshine Potion",
+                message: "Your energetic greeting and enchanting smile light up my whole world every morning! You're my daily sunshine! 😊🌅",
+                emoji: "☀️😊",
+                photo: "https://raw.githubusercontent.com/RLugan/Our-Love-Potion/main/images/morning-smile.jpg"
+            },
+            "caring-heart,watch-out-baby": {
+                name: "Protective Love Elixir",
+                message: "Watch out babbbyyy! Your caring heart combined with my protective love - we always look after each other! ❤️👀",
+                emoji: "🛡️❤️",
+                photo: "https://raw.githubusercontent.com/RLugan/Our-Love-Potion/main/images/protective-love.jpg" 
+            },
+            "half-asleep,sleepy-talk": {
+                name: "Dreamy Mumbles Potion",
+                message: "Your adorable half-asleep replies when everything mixes together! Those sleepy mumbles are the cutest thing ever! 😴🥱",
+                emoji: "😴💭",
+                photo: "https://raw.githubusercontent.com/RLugan/Our-Love-Potion/main/images/sleepy-talk.jpg"
+            },
+            "creative-soul,her-drawing": {
+                name: "Artistic Heart Brew",
+                message: "Your amazing drawing talent and creative soul inspire me every day! You make everything beautiful! 🎨✨",
+                emoji: "🎨💖",
+                photo: "https://raw.githubusercontent.com/RLugan/Our-Love-Potion/main/images/creative-drawing.jpg"
+            },
+            "family-home,wedding-day": {
+                name: "Forever Together Elixir",
+                message: "I can't wait to create our cozy, loving family together! From wedding day to our beautiful home! 👰🏠",
+                emoji: "💒🏠",
+                photo: "https://raw.githubusercontent.com/RLugan/Our-Love-Potion/main/images/wedding-home.jpg"
+            },
+            "aurora-lights,travel-dreams": {
+                name: "Starlight Journey Potion",
+                message: "Watching the northern lights together in each other's arms! Every travel dream becomes magical with you! 🌌✈️",
+                emoji: "🌠✈️",
+                photo: "https://raw.githubusercontent.com/RLugan/Our-Love-Potion/main/images/aurora-travel.jpg"
+            },
+            "adventures-together,creating-memories": {
+                name: "Memory Maker Brew",
+                message: "Every new place becomes special with you! Our adventures together create the most beautiful memories! 🗺️📸",
+                emoji: "🗺️💫",
+                photo: "https://raw.githubusercontent.com/RLugan/Our-Love-Potion/main/images/memory-adventures.jpg"
+            }
+        };
+
+        const wrongMessages = [
+            "Almost there! These feel connected but try the exact pairs from the hints! ✨",
+            "So close! Look for ingredients that mention each other in their hints! 🤔",
+            "Getting warmer! Check which ingredients are suggested together! 💭",
+            "Nearly magical! The perfect match is in the ingredient hints! 🌟",
+            "Close but not quite! Try the combinations suggested in the tooltips! 💕"
+        ];
+
+        // Initialize game when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeGame();
+            randomizeIngredients();
+        });
+
+        function initializeGame() {
+            setupEventListeners();
+            updateStats();
+            updateCauldronState();
+        }
+
+        function randomizeIngredients() {
+            // Get all ingredient containers by their section titles
+            const sections = document.querySelectorAll('.ingredient-section');
+            
+            sections.forEach(section => {
+                const container = section.querySelector('.ingredients-container');
+                if (container) {
+                    shuffleContainer(container);
+                }
+            });
+            
+            console.log('Ingredients shuffled!'); // Debug log
+        }
+
+        function shuffleContainer(container) {
+            const ingredients = Array.from(container.children);
+            
+            // Fisher-Yates shuffle algorithm
+            for (let i = ingredients.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                
+                // Swap elements in the DOM
+                if (i !== j) {
+                    const temp = ingredients[i];
+                    const tempNext = temp.nextSibling;
+                    const tempParent = temp.parentNode;
+                    
+                    // Move ingredients[j] to where ingredients[i] was
+                    tempParent.insertBefore(ingredients[j], temp);
+                    
+                    // Move temp (was ingredients[i]) to where ingredients[j] was
+                    if (ingredients[j].nextSibling) {
+                        tempParent.insertBefore(temp, ingredients[j].nextSibling);
+                    } else {
+                        tempParent.appendChild(temp);
+                    }
+                    
+                    // Update array
+                    [ingredients[i], ingredients[j]] = [ingredients[j], ingredients[i]];
+                }
+            }
+        }
+
+        function setupEventListeners() {
+            // Music button
+            document.getElementById('musicBtn').addEventListener('click', startRomanticMusic);
+            
+            // Audio player controls
+            document.getElementById('playPauseBtn').addEventListener('click', togglePlayPause);
+            document.getElementById('nextBtn').addEventListener('click', nextSong);
+            document.getElementById('prevBtn').addEventListener('click', prevSong);
+            document.getElementById('volumeSlider').addEventListener('input', changeVolume);
+            document.getElementById('seekBar').addEventListener('input', seekToPosition);
+            
+            // Brew button
+            document.getElementById('brewButton').addEventListener('click', brewPotion);
+            
+            // Reset button
+            document.getElementById('resetBtn').addEventListener('click', resetGame);
+            
+            // Cauldron click
+            document.getElementById('cauldron').addEventListener('click', brewPotion);
+            
+            // Ingredient clicks
+            document.querySelectorAll('.ingredient').forEach(ingredient => {
+                ingredient.addEventListener('click', function() {
+                    selectIngredient(this);
+                });
+            });
+        }
+
+        function updateCauldronState() {
+            const cauldron = document.getElementById('cauldron');
+            
+            // Remove existing state classes
+            cauldron.classList.remove('has-ingredients');
+            
+            // Add appropriate class based on selected ingredients
+            if (selectedIngredients.length > 0) {
+                cauldron.classList.add('has-ingredients');
+            }
+        }
+
+        function selectIngredient(element) {
+            const ingredientName = element.getAttribute('data-name');
+            
+            if (element.classList.contains('selected')) {
+                selectedIngredients = selectedIngredients.filter(name => name !== ingredientName);
+                element.classList.remove('selected');
+            } else if (selectedIngredients.length < 3) {
+                selectedIngredients.push(ingredientName);
+                element.classList.add('selected');
+            }
+            
+            updateSelectedDisplay();
+            updateBrewButton();
+            updateCauldronState();
+        }
+
+        function removeIngredient(ingredientName) {
+            selectedIngredients = selectedIngredients.filter(name => name !== ingredientName);
+            document.querySelector(`[data-name="${ingredientName}"]`).classList.remove('selected');
+            updateSelectedDisplay();
+            updateBrewButton();
+            updateCauldronState();
+        }
+
+        function updateSelectedDisplay() {
+            const container = document.getElementById('selectedIngredients');
+            
+            if (selectedIngredients.length === 0) {
+                if (!tutorialCompleted) {
+                    container.innerHTML = '<span style="opacity: 0.6;">Select the tutorial ingredients above, then brew!</span>';
+                } else {
+                    container.innerHTML = '<span style="opacity: 0.6;">Select ingredients that feel connected, then brew!</span>';
+                }
+            } else {
+                container.innerHTML = selectedIngredients.map(name => {
+                    const element = document.querySelector(`[data-name="${name}"]`);
+                    const icon = element.querySelector('.ingredient-icon').textContent;
+                    const text = element.textContent.replace(icon, '').trim().split('\n')[0];
+                    return `<div class="selected-ingredient">
+                        ${icon} ${text}
+                        <span class="remove-ingredient" onclick="removeIngredient('${name}')">×</span>
+                    </div>`;
+                }).join('');
+            }
+        }
+
+        function updateBrewButton() {
+            const button = document.getElementById('brewButton');
+            if (selectedIngredients.length >= 2) {
+                button.disabled = false;
+                button.textContent = `🔥 Brew ${selectedIngredients.length} Ingredients! 🔥`;
+            } else {
+                button.disabled = true;
+                button.textContent = '🔥 Brew Potion! 🔥';
+            }
+        }
+
+        function brewPotion() {
+            if (selectedIngredients.length < 2) return;
+            
+            const cauldron = document.getElementById('cauldron');
+            const messageArea = document.getElementById('messageArea');
+            
+            cauldron.classList.add('brewing');
+            
+            setTimeout(() => {
+                attemptCount++;
+                
+                const recipeKey = selectedIngredients.sort().join(',');
+                
+                if (potionRecipes[recipeKey] && !usedRecipes.has(recipeKey)) {
+                    const potion = potionRecipes[recipeKey];
+                    usedRecipes.add(recipeKey);
+                    discoveredPotions.add(potion.name);
+                    successCount++;
+                    
+                    if (recipeKey === "first-date,taman-mini" && !tutorialCompleted) {
+                        completeTutorial();
+                    }
+                    
+                    // Only update message area (no top popup)
+                    messageArea.className = 'message-area success';
+                    messageArea.innerHTML = `<strong>🎉 ${potion.name} Discovered!</strong><br>${potion.message}`;
+                    
+                    addDiscoveredPotion(potion);
+                    addMemoryToGallery(potion);
+                    createSuccessEffect(potion);
+                    playSuccessSound();
+                    
+                    // Mark ingredients as used and deselect them
+                    selectedIngredients.forEach(name => {
+                        const ingredient = document.querySelector(`[data-name="${name}"]`);
+                        ingredient.classList.add('used');
+                        ingredient.classList.remove('selected');
+                    });
+                    
+                } else if (usedRecipes.has(recipeKey)) {
+                    const message = "🔄 You've already discovered this combination! Try something new!";
+                    messageArea.className = 'message-area failure';
+                    messageArea.textContent = message;
+                    createExplosion();
+                    playFailureSound();
+                    
+                    // Deselect ingredients for failed attempts too
+                    selectedIngredients.forEach(name => {
+                        document.querySelector(`[data-name="${name}"]`).classList.remove('selected');
+                    });
+                    
+                } else {
+                    const wrongMessage = wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
+                    messageArea.className = 'message-area failure';
+                    messageArea.textContent = wrongMessage;
+                    createExplosion();
+                    playFailureSound();
+                    
+                    // Deselect ingredients for failed attempts too
+                    selectedIngredients.forEach(name => {
+                        document.querySelector(`[data-name="${name}"]`).classList.remove('selected');
+                    });
+                }
+                
+                // Clear selections and reset cauldron
+                selectedIngredients.forEach(name => {
+                    document.querySelector(`[data-name="${name}"]`).classList.remove('selected');
+                });
+                selectedIngredients = [];
+                updateSelectedDisplay();
+                updateBrewButton();
+                updateCauldronState();
+                updateStats();
+                
+                // Reset cauldron animation
+                setTimeout(() => {
+                    cauldron.classList.remove('brewing');
+                    cauldron.style.animation = 'cauldronGlow 4s ease-in-out infinite';
+                }, 500);
+            }, 2000);
+        }
+
+        function completeTutorial() {
+            tutorialCompleted = true;
+            const tutorialBox = document.getElementById('tutorialBox');
+            tutorialBox.style.display = 'none';
+            
+            document.querySelectorAll('.tutorial-highlight').forEach(el => {
+                el.classList.remove('tutorial-highlight');
+            });
+        }
+
+        function addDiscoveredPotion(potion) {
+            const list = document.getElementById('discoveredList');
+            if (discoveredPotions.size === 1) {
+                list.innerHTML = '';
+            }
+            
+            const potionDiv = document.createElement('div');
+            potionDiv.className = 'discovered-potion';
+            potionDiv.innerHTML = `${potion.emoji} <strong>${potion.name}</strong>`;
+            list.appendChild(potionDiv);
+        }
+
+        function updateStats() {
+            document.getElementById('potionCount').textContent = discoveredPotions.size;
+            document.getElementById('attemptCount').textContent = attemptCount;
+            const successRate = attemptCount > 0 ? Math.round((successCount / attemptCount) * 100) : 0;
+            document.getElementById('successRate').textContent = successRate + '%';
+        }
+
+        function createSuccessEffect(potion) {
+            const cauldron = document.getElementById('cauldron');
+            const cauldronRect = cauldron.getBoundingClientRect();
+            const centerX = cauldronRect.left + cauldronRect.width / 2;
+            const centerY = cauldronRect.top + cauldronRect.height / 2;
+            
+            // Simple heart burst effect for all potions
+            createHeartBurst(centerX, centerY);
+            
+            // Add cauldron glow effect
+            cauldron.style.animation = 'successGlow 2s ease-in-out';
+        }
+
+        function addMemoryToGallery(potion) {
+            const grid = document.getElementById('memoryGrid');
+            
+            // Clear placeholder text on first memory
+            if (discoveredPotions.size === 1) {
+                grid.innerHTML = '';
+            }
+            
+            // Create memory thumbnail
+            const thumbnail = document.createElement('div');
+            thumbnail.className = 'memory-thumbnail';
+            
+            // Try to load the image and handle errors
+            const img = new Image();
+            img.onload = function() {
+                thumbnail.style.backgroundImage = `url('${potion.photo}')`;
+            };
+            img.onerror = function() {
+                console.log('Failed to load image:', potion.photo);
+                // Fallback: show a placeholder with the emoji
+                thumbnail.style.background = 'linear-gradient(45deg, #ff6b6b, #4ecdc4)';
+                thumbnail.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 24px;">${potion.emoji}</div>`;
+            };
+            img.src = potion.photo;
+            
+            thumbnail.onclick = () => openPhotoModal(potion);
+            
+            // Add label
+            const label = document.createElement('div');
+            label.className = 'memory-label';
+            label.textContent = potion.emoji;
+            thumbnail.appendChild(label);
+            
+            grid.appendChild(thumbnail);
+        }
+
+        function openPhotoModal(potion) {
+            const modal = document.getElementById('photoModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalCaption = document.getElementById('modalCaption');
+            
+            // Try to load the image in the modal
+            const img = new Image();
+            img.onload = function() {
+                modalImage.src = potion.photo;
+                modalImage.style.display = 'block';
+            };
+            img.onerror = function() {
+                console.log('Failed to load image in modal:', potion.photo);
+                modalImage.style.display = 'none';
+            };
+            img.src = potion.photo;
+            
+            modalCaption.innerHTML = `<strong>${potion.name}</strong><br>${potion.message}`;
+            modal.classList.add('show');
+        }
+
+        function closePhotoModal() {
+            const modal = document.getElementById('photoModal');
+            modal.classList.remove('show');
+        }
+
+        function showPotionPhoto(potion) {
+            // Function removed - no longer using cauldron photos
+        }
+
+        function clearPotionPhoto() {
+            // Function removed - no longer using cauldron photos
+        }
+
+        function createExplosion() {
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const explosion = document.createElement('div');
+                    explosion.className = 'explosion';
+                    explosion.textContent = ['💥', '🎆', '✨', '💫'][Math.floor(Math.random() * 4)];
+                    explosion.style.left = (Math.random() * window.innerWidth) + 'px';
+                    explosion.style.top = (Math.random() * window.innerHeight) + 'px';
+                    explosion.style.color = '#ff6b6b';
+                    document.body.appendChild(explosion);
+                    
+                    setTimeout(() => explosion.remove(), 3000);
+                }, i * 200);
+            }
+        }
+
+        function playSuccessSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 523;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                console.log('Audio not available');
+            }
+        }
+
+        function playFailureSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 220;
+                oscillator.type = 'sawtooth';
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (e) {
+                console.log('Audio not available');
+            }
+        }
+
+        function createHeartBurst(x, y) {
+            const hearts = ['💖', '💕', '💗', '💝', '💘', '🌟', '✨', '🎉'];
+            for (let i = 0; i < 12; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'potion-effect';
+                    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                    heart.style.left = (x + (Math.random() - 0.5) * 120) + 'px';
+                    heart.style.top = (y + (Math.random() - 0.5) * 120) + 'px';
+                    heart.style.animation = 'heartBurst 3s ease-out forwards';
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 3000);
+                }, i * 80);
+            }
+        }
+
+        function resetGame() {
+            selectedIngredients = [];
+            discoveredPotions = new Set();
+            usedRecipes = new Set();
+            attemptCount = 0;
+            successCount = 0;
+            tutorialCompleted = false;
+            
+            // Clear any showing photo
+            clearPotionPhoto();
+            
+            document.querySelectorAll('.ingredient').forEach(ingredient => {
+                ingredient.classList.remove('selected', 'used');
+            });
+            
+            const tutorialBox = document.getElementById('tutorialBox');
+            tutorialBox.style.display = 'block';
+            
+            // Re-randomize ingredients on reset
+            randomizeIngredients();
+            
+            // Add tutorial highlights to Taman Mini and First Date wherever they are now
+            setTimeout(() => {
+                document.querySelector('[data-name="taman-mini"]').classList.add('tutorial-highlight');
+                document.querySelector('[data-name="first-date"]').classList.add('tutorial-highlight');
+            }, 100);
+            
+            updateSelectedDisplay();
+            updateBrewButton();
+            updateCauldronState();
+            updateStats();
+            
+            const messageArea = document.getElementById('messageArea');
+            messageArea.className = 'message-area';
+            messageArea.textContent = 'Start with the tutorial recipe above, then discover more magical combinations!';
+            
+            const list = document.getElementById('discoveredList');
+            list.innerHTML = '<div style="text-align: center; opacity: 0.6; font-size: 12px;">No potions discovered yet... Try the tutorial first!</div>';
+        }
+
+        // Music player functions
+        function startRomanticMusic() {
+            if (musicPlaying) return;
+            
+            const musicBtn = document.getElementById('musicBtn');
+            const lyricsDisplay = document.getElementById('lyricsDisplay');
+            const audioPlayer = document.getElementById('audioPlayer');
+            
+            musicBtn.textContent = '🎶 Music Playing... 🎶';
+            musicBtn.classList.add('playing');
+            musicBtn.disabled = true;
+            
+            // Show audio player and lyrics
+            audioPlayer.style.display = 'block';
+            lyricsDisplay.style.display = 'block';
+            
+            musicPlaying = true;
+            
+            // Initialize audio and force play immediately
+            audio = document.getElementById('mainAudio');
+            const currentSong = romanticPlaylist[currentSongIndex];
+            audio.src = currentSong.file;
+            audio.volume = 0.7;
+            currentLyricIndex = 0;
+            
+            // Try multiple approaches to auto-play
+            const attemptPlay = () => {
+                audio.play().then(() => {
+                    const playPauseBtn = document.getElementById('playPauseBtn');
+                    playPauseBtn.textContent = '⏸️';
+                    playPauseBtn.classList.add('playing');
+                    console.log('Music started successfully!');
+                }).catch(e => {
+                    console.log('Autoplay prevented, trying user interaction');
+                    // If autoplay fails, show play button ready to click
+                    const playPauseBtn = document.getElementById('playPauseBtn');
+                    playPauseBtn.textContent = '▶️';
+                    playPauseBtn.classList.remove('playing');
+                    musicPlaying = false;
+                });
+            };
+            
+            // Try playing immediately
+            attemptPlay();
+            
+            // Set up event listeners for future songs
+            audio.addEventListener('ended', nextSong);
+            audio.addEventListener('timeupdate', updateSeekBar);
+            audio.addEventListener('loadedmetadata', updateDuration);
+            
+            updatePlayerDisplay();
+            updateLyricDisplay();
+            startLyricDisplay();
+            
+            // Minimize player after 3 seconds
+            setTimeout(minimizePlayer, 3000);
+        }
+
+        function minimizePlayer() {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const playerInfo = audioPlayer.querySelector('.player-info');
+            const songDisplay = audioPlayer.querySelector('.song-display');
+            const artistDisplay = audioPlayer.querySelector('.artist-display');
+            const seekContainer = audioPlayer.querySelector('.seek-bar-container');
+            const playerControls = audioPlayer.querySelector('.player-controls');
+            const volumeControl = audioPlayer.querySelector('.volume-control');
+            const volumeSlider = audioPlayer.querySelector('#volumeSlider');
+            
+            audioPlayer.classList.add('minimized');
+            playerInfo.classList.add('minimized');
+            songDisplay.classList.add('minimized');
+            artistDisplay.classList.add('minimized');
+            seekContainer.classList.add('minimized');
+            playerControls.classList.add('minimized');
+            volumeControl.classList.add('minimized');
+            volumeSlider.classList.add('minimized');
+            
+            // Make all control buttons smaller
+            audioPlayer.querySelectorAll('.control-btn').forEach(btn => {
+                btn.classList.add('minimized');
+            });
+        }
+
+        function updateSeekBar() {
+            if (audio && audio.duration) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                document.getElementById('seekBar').value = progress;
+                
+                // Update time displays
+                document.getElementById('currentTime').textContent = formatTime(audio.currentTime);
+            }
+        }
+
+        function updateDuration() {
+            if (audio && audio.duration) {
+                document.getElementById('totalTime').textContent = formatTime(audio.duration);
+            }
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function seekToPosition() {
+            if (audio && audio.duration) {
+                const seekBar = document.getElementById('seekBar');
+                const seekTime = (seekBar.value / 100) * audio.duration;
+                audio.currentTime = seekTime;
+            }
+        }
+
+        function loadCurrentSong() {
+            const currentSong = romanticPlaylist[currentSongIndex];
+            audio.src = currentSong.file;
+            currentLyricIndex = 0;
+            updatePlayerDisplay();
+            updateLyricDisplay();
+        }
+
+        function updatePlayerDisplay() {
+            const currentSong = romanticPlaylist[currentSongIndex];
+            document.getElementById('currentSong').textContent = `🎵 ${currentSong.title}`;
+            document.getElementById('currentArtist').textContent = currentSong.artist;
+            document.getElementById('songTitle').textContent = `🎶 ${currentSong.title} 🎶`;
+        }
+
+        function updateLyricDisplay() {
+            const currentSong = romanticPlaylist[currentSongIndex];
+            const lyricLine = document.getElementById('lyricLine');
+            
+            if (currentSong.lyrics && currentSong.lyrics.length > 0) {
+                lyricLine.textContent = currentSong.lyrics[currentLyricIndex % currentSong.lyrics.length];
+            }
+        }
+
+        function startLyricDisplay() {
+            function updateLyric() {
+                if (!musicPlaying) return;
+                
+                updateLyricDisplay();
+                currentLyricIndex++;
+                
+                setTimeout(updateLyric, 4000); // Change lyric every 4 seconds
+            }
+            
+            updateLyric();
+        }
+
+        function togglePlayPause() {
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            
+            if (audio.paused) {
+                audio.play().catch(e => console.log('Play failed'));
+                playPauseBtn.textContent = '⏸️';
+                playPauseBtn.classList.add('playing');
+                musicPlaying = true;
+            } else {
+                audio.pause();
+                playPauseBtn.textContent = '▶️';
+                playPauseBtn.classList.remove('playing');
+                musicPlaying = false;
+            }
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % romanticPlaylist.length;
+            loadCurrentSong();
+            // Auto-play the new song immediately
+            setTimeout(() => {
+                if (musicPlaying) {
+                    audio.play().then(() => {
+                        const playPauseBtn = document.getElementById('playPauseBtn');
+                        playPauseBtn.textContent = '⏸️';
+                        playPauseBtn.classList.add('playing');
+                    }).catch(e => console.log('Play failed'));
+                }
+            }, 100);
+        }
+
+        function prevSong() {
+            currentSongIndex = (currentSongIndex - 1 + romanticPlaylist.length) % romanticPlaylist.length;
+            loadCurrentSong();
+            // Auto-play the new song immediately
+            setTimeout(() => {
+                if (musicPlaying) {
+                    audio.play().then(() => {
+                        const playPauseBtn = document.getElementById('playPauseBtn');
+                        playPauseBtn.textContent = '⏸️';
+                        playPauseBtn.classList.add('playing');
+                    }).catch(e => console.log('Play failed'));
+                }
+            }, 100);
+        }
+
+        function changeVolume() {
+            const volume = document.getElementById('volumeSlider').value / 100;
+            if (audio) {
+                audio.volume = volume;
+            }
+        }
+
+        // Make removeIngredient globally accessible
+        window.removeIngredient = removeIngredient;
+    </script>
+</body>
+</html>
