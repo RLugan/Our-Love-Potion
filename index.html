@@ -2050,22 +2050,22 @@ ctx.strokeRect(50, 50, 980, 1820);
 ctx.fillStyle = '#ffb3ff';
 ctx.font = 'bold 72px Arial';
 ctx.textAlign = 'center';
-ctx.fillText('💕 Our Love Potion 💕', 540, 180);
+ctx.fillText('💕 Our Love Potion 💕', 540, 200);
 
 // Add potion name
 ctx.fillStyle = '#ffd700';
 ctx.font = 'bold 48px Arial';
-ctx.fillText(potion.emoji + ' ' + potion.name, 540, 280);
+ctx.fillText(potion.emoji + ' ' + potion.name, 540, 300);
     
     // Load and draw the memory photo
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = function() {
-        // Calculate aspect ratio and draw photo properly
-    const maxPhotoWidth = 300;
-    const maxPhotoHeight = 200;
-    const photoX = (400 - maxPhotoWidth) / 2;
-    const photoY = 150;
+    // Calculate aspect ratio and draw photo properly - make it much bigger
+    const maxPhotoWidth = 800;
+    const maxPhotoHeight = 800;
+    const photoX = (1080 - maxPhotoWidth) / 2;
+    const photoY = 350;
 
     // Calculate scaling to fit within bounds while maintaining aspect ratio
     const scaleX = maxPhotoWidth / img.width;
@@ -2083,13 +2083,13 @@ ctx.fillText(potion.emoji + ' ' + potion.name, 540, 280);
 
     // Add photo border around the actual image size
     ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 3;
-    ctx.strokeRect(centeredX - 3, centeredY - 3, scaledWidth + 6, scaledHeight + 6);
+    ctx.lineWidth = 8;
+    ctx.strokeRect(centeredX - 8, centeredY - 8, scaledWidth + 16, scaledHeight + 16);
         
-        // Add message (wrapped text)
+        // Add message (wrapped text) - with left alignment
         ctx.fillStyle = '#ffffff';
-        ctx.font = '14px Arial';
-        ctx.textAlign = 'center';
+        ctx.font = 'bold 36px Arial';
+        ctx.textAlign = 'left';
         
         const message = potion.message;
         const words = message.split(' ');
@@ -2100,7 +2100,7 @@ ctx.fillText(potion.emoji + ' ' + potion.name, 540, 280);
         for (let word of words) {
             const testLine = currentLine + word + ' ';
             const metrics = ctx.measureText(testLine);
-            if (metrics.width > 350 && currentLine !== '') {
+            if (metrics.width > 800 && currentLine !== '') {
                 lines.push(currentLine.trim());
                 currentLine = word + ' ';
             } else {
@@ -2109,22 +2109,24 @@ ctx.fillText(potion.emoji + ' ' + potion.name, 540, 280);
         }
         lines.push(currentLine.trim());
         
-        // Draw wrapped text
-        let textY = 400;
+        // Draw wrapped text - better spacing and left aligned
+        let textY = 1250;
+        const textStartX = 140; // Left aligned with padding
         for (let line of lines) {
-            ctx.fillText(line, 200, textY);
-            textY += 20;
+            ctx.fillText(line, textStartX, textY);
+            textY += 55;
         }
         
         // Add birthday message
         ctx.fillStyle = '#ff69b4';
-        ctx.font = 'bold 16px Arial';
-        ctx.fillText('🎂 Happy Birthday September 2nd! 🎂', 200, textY + 30);
+        ctx.font = 'bold 40px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('🎂 Happy Birthday September 2nd! 🎂', 540, textY + 120);
         
         // Add branding
         ctx.fillStyle = '#e6ccff';
-        ctx.font = '12px Arial';
-        ctx.fillText('✨ Our Love Potion Game ✨', 200, 570);
+        ctx.font = 'bold 32px Arial';
+        ctx.fillText('✨ Our Love Potion Game ✨', 540, 1850);
         
         // Download the image
         console.log('Image loaded successfully, downloading...');
@@ -2150,7 +2152,7 @@ ctx.fillText(potion.emoji + ' ' + potion.name, 540, 280);
         for (let word of words) {
             const testLine = currentLine + word + ' ';
             const metrics = ctx.measureText(testLine);
-            if (metrics.width > 350 && currentLine !== '') {
+            if (metrics.width > 900 && currentLine !== '') {
                 lines.push(currentLine.trim());
                 currentLine = word + ' ';
             } else {
